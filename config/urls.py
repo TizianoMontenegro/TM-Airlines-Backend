@@ -19,8 +19,8 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from flights.views import FlightViewSet
 from bookings.views import BookingViewSet
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from users.views import RegistrationView
+from rest_framework_simplejwt.views import TokenRefreshView
+from users.views import RegistrationView, CustomTokenObtainPairView
 
 router = DefaultRouter()
 router.register("flights", FlightViewSet)
@@ -28,7 +28,7 @@ router.register("bookings", BookingViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("api/v1/auth/login/", TokenObtainPairView.as_view()),
+    path("api/v1/auth/login/", CustomTokenObtainPairView.as_view()),
     path("api/v1/auth/refresh/", TokenRefreshView.as_view()),
     path("api/v1/auth/register/", RegistrationView.as_view()),
     path("api/v1/", include(router.urls)),
