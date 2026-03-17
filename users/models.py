@@ -9,3 +9,4 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     email = models.EmailField(unique=True)
     language = models.CharField(max_length=5, default="en")
+    date_of_birth = models.DateField(null=True, blank=True)
