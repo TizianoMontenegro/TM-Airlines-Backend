@@ -17,10 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from flights.views import FlightViewSet
+from flights.views import FlightViewSet, FlightStatusView
 from bookings.views import BookingViewSet
 from rest_framework_simplejwt.views import TokenRefreshView
-from users.views import RegistrationView, CustomTokenObtainPairView
+from users.views import RegistrationView, CustomTokenObtainPairView, UserProfileView
 
 router = DefaultRouter()
 router.register("flights", FlightViewSet)
@@ -32,4 +32,6 @@ urlpatterns = [
     path("api/v1/auth/refresh/", TokenRefreshView.as_view()),
     path("api/v1/auth/register/", RegistrationView.as_view()),
     path("api/v1/", include(router.urls)),
+    path("api/v1/users/<int:pk>/profile/", UserProfileView.as_view(), name="user-profile"),
+    path("api/v1/flights/<str:flight_number>/status/", FlightStatusView.as_view(), name="flight-status"),
 ]
