@@ -1,7 +1,10 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import CustomTokenObtainPairSerializer
+from core.authentication import ServiceTokenAuthentication
+from .serializers import CustomTokenObtainPairSerializer, UserProfileSerializer
 from django.contrib.auth import get_user_model
 from .serializers import UserRegistrationSerializer
 
@@ -23,3 +26,10 @@ class RegistrationView(generics.CreateAPIView):
             {"message": "User created successfully."},
             status=status.HTTP_201_CREATED
         )
+
+
+class UserProfileView(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserProfileSerializer
+    authentication_classes = [ServiceTokenAuthentication, JWTAuthentication]
+    permission_classes = [IsAuthenticated]
