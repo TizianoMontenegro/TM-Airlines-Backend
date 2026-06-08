@@ -31,6 +31,9 @@ python manage.py test flights.tests.SomeTestClass
 
 # Run a single test method
 python manage.py test flights.tests.SomeTestClass.test_something
+
+# Run integration tests
+python manage.py test tests.integration
 ```
 
 ### Database Migrations
@@ -55,6 +58,34 @@ python manage.py shell
 
 # Check for issues
 python manage.py check
+
+# Deployment check
+python manage.py check --deploy
+
+# Verify no pending migrations
+python manage.py makemigrations --check
+```
+
+### Seed Data
+```bash
+python manage.py seed_data
+```
+
+### TM-RAG Service Token
+```bash
+python manage.py create_rag_service_user
+python manage.py create_rag_service_user --username rag-service --days 365
+```
+
+### PostgreSQL Migration
+```bash
+# Requires DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT env vars
+python scripts/migrate_to_postgres.py
+
+# Or manually:
+$env:DJANGO_SETTINGS_MODULE="config.settings.production"
+python manage.py migrate
+python manage.py seed_data
 ```
 
 ## Code Style Guidelines
@@ -272,9 +303,23 @@ tm-airlines-backend/
 │   ├── urls.py (if needed)
 │   ├── tests.py
 │   └── apps.py
+├── core/
+│   ├── __init__.py
+│   └── authentication.py       # ServiceTokenAuthentication for TM-RAG
+├── scripts/
+│   └── migrate_to_postgres.py  # SQLite → PostgreSQL migration tool
+├── tests/
+│   ├── __init__.py
+│   └── integration/
+│       ├── __init__.py
+│       └── test_service_endpoints.py
 ├── bookings/
 │   └── (same structure)
 └── users/
+    ├── management/
+    │   └── commands/
+    │       ├── seed_data.py
+    │       └── create_rag_service_user.py
     └── (same structure)
 ```
 
@@ -283,12 +328,23 @@ tm-airlines-backend/
 Create a `.env` file in the root:
 
 ```env
+# Django
 SECRET_KEY=your-secret-key
 DEBUG=True
 ALLOWED_HOSTS=localhost,127.0.0.1
+
+# Database (SQLite for local dev)
 DATABASE_URL=sqlite:///db.sqlite3
-# For PostgreSQL:
-# DATABASE_URL=postgresql://user:password@localhost:5432/dbname
+
+# PostgreSQL (production)
+DB_NAME=tm_airlines
+DB_USER=postgres
+DB_PASSWORD=change-me
+DB_HOST=localhost
+DB_PORT=5432
+
+# TM-RAG Service Integration
+TM_RAG_API_KEY=generate-via-create-rag-service-user-command
 ```
 
 ## API Endpoints
@@ -297,8 +353,11 @@ DATABASE_URL=sqlite:///db.sqlite3
 |--------|----------|-------------|
 | POST | `/api/v1/auth/login/` | Obtain JWT token |
 | POST | `/api/v1/auth/refresh/` | Refresh JWT token |
+| POST | `/api/v1/auth/register/` | Register a new user |
+| GET | `/api/v1/users/{id}/profile/` | Get user profile (service/user auth) |
 | GET | `/api/v1/flights/` | List flights |
 | GET | `/api/v1/flights/{id}/` | Get flight details |
+| GET | `/api/v1/flights/{flight_number}/status/` | Get flight status (service/user auth) |
 | GET | `/api/v1/bookings/` | List user bookings |
 | POST | `/api/v1/bookings/` | Create booking |
 | GET | `/api/v1/bookings/{id}/` | Get booking details |
