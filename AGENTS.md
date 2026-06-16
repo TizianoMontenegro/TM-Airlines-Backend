@@ -11,6 +11,8 @@ This document provides guidelines for AI agents working on this Django REST API 
 
 ## Commands
 
+> **Note**: If `python` resolves to a system interpreter instead of the venv, use `venv\Scripts\python.exe` or activate the venv first: `venv\Scripts\Activate.ps1`
+
 ### Running the Server
 ```bash
 python manage.py runserver
@@ -79,7 +81,7 @@ python manage.py create_rag_service_user --username rag-service --days 365
 
 ### PostgreSQL Migration
 ```bash
-# Requires DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT env vars
+# Requires DATABASE_URL env var (or DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT for self-hosted)
 python scripts/migrate_to_postgres.py
 
 # Or manually:
@@ -336,12 +338,15 @@ ALLOWED_HOSTS=localhost,127.0.0.1
 # Database (SQLite for local dev)
 DATABASE_URL=sqlite:///db.sqlite3
 
-# PostgreSQL (production)
-DB_NAME=tm_airlines
-DB_USER=postgres
-DB_PASSWORD=change-me
-DB_HOST=localhost
-DB_PORT=5432
+# PostgreSQL (production) — just set DATABASE_URL:
+# DATABASE_URL=postgresql://user:pass@host:5432/dbname?sslmode=require
+
+# Alternative: self-hosted PostgreSQL (uncomment and fill, comment DATABASE_URL above):
+# DB_NAME=tm_airlines
+# DB_USER=postgres
+# DB_PASSWORD=change-me
+# DB_HOST=localhost
+# DB_PORT=5432
 
 # TM-RAG Service Integration
 TM_RAG_API_KEY=generate-via-create-rag-service-user-command
