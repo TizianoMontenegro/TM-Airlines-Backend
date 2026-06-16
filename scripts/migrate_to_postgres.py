@@ -6,7 +6,8 @@ Usage:
     python scripts/migrate_to_postgres.py
 
 Requires:
-    - DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT env vars set.
+    - DATABASE_URL env var set (e.g. postgresql://user:pass@host:5432/dbname).
+    - For self-hosted: DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT env vars.
     - PostgreSQL database already created.
 """
 import os
