@@ -9,6 +9,42 @@ This document provides guidelines for AI agents working on this Django REST API 
 - **Authentication**: JWT via djangorestframework-simplejwt
 - **Python Version**: 3.10+
 
+## Setup for New Developers
+
+```bash
+# 1. Clone
+git clone <repo-url> tm-airlines-backend
+cd tm-airlines-backend
+
+# 2. Virtual environment
+python -m venv venv
+venv\Scripts\Activate.ps1    # PowerShell
+venv\Scripts\activate.bat    # cmd.exe
+
+# 3. Install dependencies
+pip install -r requirements.txt
+
+# 4. Environment config
+cp .env.example .env
+# Edit .env and set DATABASE_URL:
+#   sqlite:///db.sqlite3         → local SQLite (no setup needed)
+#   postgresql://user:pass@...   → Neon/PostgreSQL
+
+# 5. Migrate and seed
+python manage.py migrate
+python manage.py seed_data
+
+# 6. Create admin user
+python manage.py createsuperuser
+
+# 7. Run
+python manage.py runserver
+```
+
+The database is auto-detected from `DATABASE_URL` in `.env`:
+- If it starts with `postgres` → connects to PostgreSQL/Neon
+- Otherwise → uses local SQLite
+
 ## Commands
 
 > **Note**: If `python` resolves to a system interpreter instead of the venv, use `venv\Scripts\python.exe` or activate the venv first: `venv\Scripts\Activate.ps1`
