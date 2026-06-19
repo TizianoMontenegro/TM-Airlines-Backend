@@ -371,6 +371,9 @@ SECRET_KEY=your-secret-key
 DEBUG=True
 ALLOWED_HOSTS=localhost,127.0.0.1
 
+# Comma-separated list of allowed CORS origins (your frontend URL)
+CORS_ALLOWED_ORIGINS=http://localhost:3000
+
 # Database (SQLite for local dev)
 DATABASE_URL=sqlite:///db.sqlite3
 
