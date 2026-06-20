@@ -109,6 +109,18 @@ python manage.py makemigrations --check
 python manage.py seed_data
 ```
 
+### Auto-create Superuser
+```bash
+python manage.py ensure_superuser
+```
+Requires env vars: `DJANGO_SUPERUSER_USERNAME`, `DJANGO_SUPERUSER_EMAIL`, `DJANGO_SUPERUSER_PASSWORD`.
+
+### Deploy (Render)
+```bash
+./start.sh
+```
+Runs migrations, seeds data, creates superuser, then starts gunicorn.
+
 ### TM-RAG Service Token
 ```bash
 python manage.py create_rag_service_user
@@ -325,6 +337,8 @@ class FlightTestCase(TestCase):
 tm-airlines-backend/
 ├── manage.py
 ├── requirements.txt
+├── Procfile
+├── start.sh
 ├── config/
 │   ├── settings/
 │   │   ├── base.py
@@ -386,6 +400,11 @@ DATABASE_URL=sqlite:///db.sqlite3
 # DB_PASSWORD=change-me
 # DB_HOST=localhost
 # DB_PORT=5432
+
+# Superuser (auto-created on deploy via ensure_superuser)
+DJANGO_SUPERUSER_USERNAME=admin
+DJANGO_SUPERUSER_EMAIL=admin@example.com
+DJANGO_SUPERUSER_PASSWORD=change-me
 
 # TM-RAG Service Integration
 TM_RAG_API_KEY=generate-via-create-rag-service-user-command
