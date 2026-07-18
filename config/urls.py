@@ -34,4 +34,5 @@ urlpatterns = [
     path("api/v1/", include(router.urls)),
     path("api/v1/users/<int:pk>/profile/", UserProfileView.as_view(), name="user-profile"),
     path("api/v1/flights/<str:flight_number>/status/", FlightStatusView.as_view(), name="flight-status"),
+    path("api/v1/rag/", include("rag.urls")),
 ]
