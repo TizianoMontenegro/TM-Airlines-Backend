@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     "users",
     "flights",
     "bookings",
+    "rag",
 ]
 
 MIDDLEWARE = [
